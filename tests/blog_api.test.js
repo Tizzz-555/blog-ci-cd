@@ -151,17 +151,12 @@ describe("when there is initially some blogs saved", () => {
   describe("update of a blog", () => {
     test("succeeds if id is valid", async () => {
       const blogsAtStart = await helper.blogsInDb();
-      const blogToView = blogsAtStart[0];
-      const updatedBlog = {
-        title: "React patterns",
-        author: "Michael Chan",
-        url: "https://reactpatterns.com/",
-        likes: 2,
-      };
+      const blogToBeUpdated = { ...blogsAtStart[0] };
+      blogToBeUpdated.likes++;
 
       await api
-        .put(`/api/blogs/${blogToView.id}`)
-        .send(updatedBlog)
+        .put(`/api/blogs/${blogToBeUpdated.id}`)
+        .send(blogToBeUpdated)
         .expect(200)
         .expect("Content-Type", /application\/json/);
 
@@ -169,9 +164,9 @@ describe("when there is initially some blogs saved", () => {
       assert.strictEqual(blogsAtStart.length, blogsAtEnd.length);
 
       const updatedBlogRes = blogsAtEnd.find(
-        (b) => b.title === updatedBlog.title
+        (b) => b.id === blogToBeUpdated.id
       );
-      assert(updatedBlogRes.likes == updatedBlog.likes);
+      assert(updatedBlogRes.likes == blogToBeUpdated.likes);
     });
   });
 

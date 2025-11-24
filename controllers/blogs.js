@@ -1,12 +1,13 @@
 const blogsRouter = require("express").Router();
 const Blog = require("../models/blog");
+const { userExtractor } = require("../utils/middleware");
 
 blogsRouter.get("/", async (req, res) => {
   const blogs = await Blog.find({}).populate("user", { username: 1, name: 1 });
   res.json(blogs);
 });
 
-blogsRouter.post("/", async (req, res) => {
+blogsRouter.post("/", userExtractor, async (req, res) => {
   const body = req.body;
   const user = req.user;
 
@@ -29,20 +30,20 @@ blogsRouter.post("/", async (req, res) => {
   res.status(201).json(savedBlog);
 });
 
-blogsRouter.post("/:id/comments", async (req, res) => {
-  const { id } = req.params;
-  const { comment } = req.body;
-  if (!comment) {
-    return res.status(400).json({ error: "comment is required" });
-  }
-  const blog = await Blog.findById(id).populate("user", {
-    username: 1,
-    name: 1,
-  });
-  blog.comments = blog.comments.concat(comment);
-  await blog.save();
-  res.status(201).json(blog);
-});
+// blogsRouter.post("/:id/comments", async (req, res) => {
+//   const { id } = req.params;
+//   const { comment } = req.body;
+//   if (!comment) {
+//     return res.status(400).json({ error: "comment is required" });
+//   }
+//   const blog = await Blog.findById(id).populate("user", {
+//     username: 1,
+//     name: 1,
+//   });
+//   blog.comments = blog.comments.concat(comment);
+//   await blog.save();
+//   res.status(201).json(blog);
+// });
 
 blogsRouter.put("/:id", async (req, res) => {
   const body = req.body;
@@ -57,7 +58,7 @@ blogsRouter.put("/:id", async (req, res) => {
   res.json(updatedBlog);
 });
 
-blogsRouter.delete("/:id", async (req, res) => {
+blogsRouter.delete("/:id", userExtractor, async (req, res) => {
   const user = req.user;
   const blog = await Blog.findById(req.params.id);
 
