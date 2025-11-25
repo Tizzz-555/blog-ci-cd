@@ -19,6 +19,7 @@ const userExtractor = async (req, res, next) => {
       }
       req["user"] = await User.findById(decodedToken.id);
     } catch (error) {
+      logger.error("JWT verification failed:", error.message);
       return res.status(401).json({ error: "token invalid" });
     }
   }

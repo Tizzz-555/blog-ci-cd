@@ -13,6 +13,7 @@ const User = require("../models/user");
 
 describe("when there is initially some blogs saved", () => {
   let token;
+  let userId;
   beforeEach(async () => {
     await Blog.deleteMany({});
     await User.deleteMany({});
@@ -60,7 +61,7 @@ describe("when there is initially some blogs saved", () => {
     const response = await api.get("/api/blogs");
 
     assert.deepStrictEqual(
-      response.body.every((b) => b.hasOwnProperty("id")),
+      response.body.every((b) => Object.hasOwn(b, "id")),
       true
     );
   });
