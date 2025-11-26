@@ -24,3 +24,22 @@ jobs:
       - name: Frontend tests
         run: npm run test
         working-directory: bloglist
+      - name: Install E2E dependencies
+        run: npm ci
+        working-directory: bloglist-e2e
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+        working-directory: bloglist-e2e
+      - name: Run E2E tests
+        run: npx playwright test
+        working-directory: bloglist-e2e
+        env:
+          TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
+          SECRET: ${{ secrets.SECRET }}
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: bloglist-e2e/playwright-report/
+          retention-days: 30
