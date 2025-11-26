@@ -79,6 +79,8 @@ module.exports = defineConfig({
       cwd: "..",
       reuseExistingServer: !process.env.CI,
       timeout: 120000,
+      stdout: "pipe",
+      stderr: "pipe",
     },
     {
       // Then start frontend
@@ -87,6 +89,8 @@ module.exports = defineConfig({
       cwd: "../bloglist",
       reuseExistingServer: !process.env.CI,
       timeout: 120000,
+      stdout: "pipe",
+      stderr: "pipe",
     },
   ],
 });
