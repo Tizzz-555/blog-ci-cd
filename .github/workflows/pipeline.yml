@@ -13,8 +13,14 @@ jobs:
           node-version: "20"
       - run: npm ci
       - run: npm run lint
-      - name: Run tests
+      - name: Backend tests
         run: npm run test
         env:
           TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
           SECRET: ${{ secrets.SECRET }}
+      - name: Install frontend dependencies
+        run: npm ci
+        working-directory: bloglist
+      - name: Frontend tests
+        run: npm run test
+        working-directory: bloglist
