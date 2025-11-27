@@ -75,7 +75,7 @@ module.exports = defineConfig({
     {
       // Start backend first
       command: "npm run start:test",
-      url: "http://localhost:3000/api/blogs",
+      url: "http://localhost:3000/health",
       cwd: "..",
       reuseExistingServer: !process.env.CI,
       timeout: 120000,
