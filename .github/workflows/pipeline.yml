@@ -27,6 +27,11 @@ jobs:
       - name: Install E2E dependencies
         run: npm ci
         working-directory: bloglist-e2e
+      - name: Build frontend
+        run: npm run build
+        working-directory: bloglist
+      - name: Copy frontend build to backend
+        run: cp -r bloglist/dist dist
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
         working-directory: bloglist-e2e

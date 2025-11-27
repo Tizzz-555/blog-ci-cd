@@ -1,4 +1,3 @@
-console.log("[app.js] Loading...");
 require("express-async-errors");
 const loginRouter = require("./controllers/login");
 const usersRouter = require("./controllers/users");
@@ -13,28 +12,20 @@ const mongoose = require("mongoose");
 
 mongoose.set("strictQuery", false);
 
-console.log("[app.js] About to connect to MongoDB...");
 logger.info("connecting to", config.MONGODB_URI);
 
 mongoose
   .connect(config.MONGODB_URI)
   .then(() => {
-    console.log("[app.js] MongoDB connected!");
     logger.info("connected to MongoDB");
   })
   .catch((error) => {
-    console.log("[app.js] MongoDB connection FAILED:", error.message);
     logger.error("error connecting to MongoDB:", error.message);
   });
 
 app.use(cors());
 app.use(express.static("dist"));
 app.use(express.json());
-
-// Health check endpoint for Playwright
-app.get("/health", (req, res) => {
-  res.status(200).send("OK");
-});
 app.use(middleware.tokenExtractor);
 app.use(middleware.requestLogger);
 app.use("/api/blogs", blogsRouter);

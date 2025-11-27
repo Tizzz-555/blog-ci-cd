@@ -1,20 +1,17 @@
 const { test, expect, beforeEach, describe } = require("@playwright/test");
 const { loginWith, createBlog, unpackBlog, likeBlog } = require("./helper");
 
-const BACKEND_URL = "http://127.0.0.1:3000";
-
 describe("Blog app", () => {
   beforeEach(async ({ page, request }) => {
-    // API calls go directly to backend (port 3000), not through Vite proxy
-    await request.post(`${BACKEND_URL}/api/testing/reset`);
-    await request.post(`${BACKEND_URL}/api/users`, {
+    await request.post("/api/testing/reset");
+    await request.post("/api/users", {
       data: {
         username: "Tiuz",
         name: "Matteo",
         password: "Zanetti",
       },
     });
-    await request.post(`${BACKEND_URL}/api/users`, {
+    await request.post("/api/users", {
       data: {
         username: "Tizz",
         name: "Mattia",
