@@ -81,6 +81,8 @@ module.exports = defineConfig({
       timeout: 120000,
       stdout: "pipe",
       stderr: "pipe",
+      // Pass environment variables to the backend process
+      env: /** @type {Record<string, string>} */ (process.env),
     },
     {
       // Then start frontend
