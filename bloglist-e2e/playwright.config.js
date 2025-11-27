@@ -31,6 +31,11 @@ module.exports = defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
+
+    /* Extra HTTP headers for API requests - not needed but good for debugging */
+    extraHTTPHeaders: {
+      Accept: "application/json",
+    },
   },
 
   /* Configure projects for major browsers */
@@ -44,26 +49,21 @@ module.exports = defineConfig({
       ],
 
   /* Run your local dev server before starting the tests */
-  // In CI, servers are started manually in the workflow
-  // Locally, start them yourself before running tests
-  webServer: process.env.CI
-    ? undefined
-    : [
-        {
-          // Start backend first
-          command: "npm run start:test",
-          url: "http://127.0.0.1:3000/health",
-          cwd: "..",
-          reuseExistingServer: true,
-          timeout: 120000,
-        },
-        {
-          // Then start frontend
-          command: "npm run dev",
-          url: "http://127.0.0.1:5173",
-          cwd: "../bloglist",
-          reuseExistingServer: true,
-          timeout: 120000,
-        },
-      ],
+  webServer: [
+    {
+      command: "npm run start:test",
+      url: "http://127.0.0.1:3000/health",
+      cwd: "..",
+      reuseExistingServer: !process.env.CI,
+      timeout: 120000,
+      env: /** @type {Record<string, string>} */ (process.env),
+    },
+    {
+      command: "npm run dev -- --host 0.0.0.0",
+      url: "http://127.0.0.1:5173",
+      cwd: "../bloglist",
+      reuseExistingServer: !process.env.CI,
+      timeout: 120000,
+    },
+  ],
 });
