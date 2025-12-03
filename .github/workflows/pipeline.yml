@@ -60,6 +60,7 @@ jobs:
         uses: superfly/flyctl-actions/setup-flyctl@master
         if: ${{ env.SHOULD_DEPLOY == 'true' }}
       - name: Deploy to Fly.io
+        id: deployment
         run: flyctl deploy --remote-only
         if: ${{ env.SHOULD_DEPLOY == 'true' }}
         env:
