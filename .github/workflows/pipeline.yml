@@ -68,9 +68,14 @@ jobs:
   tag_release:
     needs: [simple_deployment_pipeline]
     runs-on: ubuntu-latest
-    if: ${{ needs.simple_deployment_pipeline.outputs.should_deploy == 'true'}}
+    # Temporarily disabled for testing - uncomment to enable conditional execution
+    # if: ${{ needs.simple_deployment_pipeline.outputs.should_deploy == 'true'}}
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all tags and history
       - name: Bump version and push tag
         uses: anothrNick/github-tag-action@4ed44965e0db8dab2b466a16da04aec3cc312fd8
         env:
